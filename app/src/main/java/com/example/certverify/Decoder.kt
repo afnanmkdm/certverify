@@ -15,11 +15,8 @@ import kotlinx.coroutines.tasks.await
 import java.util.zip.ZipInputStream
 
 object Decoder {
-
     private val scanner = BarcodeScanning.getClient(
-        BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
-            .build()
+        BarcodeScannerOptions.Builder().setBarcodeFormats(Barcode.FORMAT_QR_CODE).build()
     )
 
     suspend fun decodeBitmap(bitmap: Bitmap): String? {
@@ -43,25 +40,18 @@ object Decoder {
     }
 
     private fun imageToBitmaps(context: Context, uri: Uri): List<Bitmap> {
-        val bmp = context.contentResolver.openInputStream(uri)?.use {
-            BitmapFactory.decodeStream(it)
-        } ?: return emptyList()
+        val bmp = context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it) } ?: return emptyList()
         return listOf(bmp)
     }
 
     private fun pdfToBitmaps(context: Context, uri: Uri): List<Bitmap> {
         val out = mutableListOf<Bitmap>()
-        val pfd: ParcelFileDescriptor =
-            context.contentResolver.openFileDescriptor(uri, "r") ?: return out
+        val pfd: ParcelFileDescriptor = context.contentResolver.openFileDescriptor(uri, "r") ?: return out
         PdfRenderer(pfd).use { renderer ->
             for (i in 0 until renderer.pageCount) {
                 renderer.openPage(i).use { page ->
-                    val scale = 3f // 3× ≈ 216 DPI — critical for small QR codes
-                    val bmp = Bitmap.createBitmap(
-                        (page.width * scale).toInt(),
-                        (page.height * scale).toInt(),
-                        Bitmap.Config.ARGB_8888
-                    )
+                    val scale = 3f
+                    val bmp = Bitmap.createBitmap((page.width * scale).toInt(), (page.height * scale).toInt(), Bitmap.Config.ARGB_8888)
                     bmp.eraseColor(Color.WHITE)
                     page.render(bmp, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
                     out.add(bmp)
@@ -78,10 +68,7 @@ object Decoder {
             ZipInputStream(input).use { zip ->
                 var entry = zip.nextEntry
                 while (entry != null) {
-                    val name = entry.name
-                    if (name.startsWith("word/media/") &&
-                        Regex(".*\\.(png|jpe?g|gif|bmp|webp)$", RegexOption.IGNORE_CASE)
-                            .matches(name)) {
+                    if (entry.name.startsWith("word/media/") && Regex(".*\\.(png|jpe?g|gif|bmp|webp)$", RegexOption.IGNORE_CASE).matches(entry.name)) {
                         val bytes = zip.readBytes()
                         BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let { out.add(it) }
                     }
