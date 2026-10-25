@@ -17,11 +17,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Generate Gradle Wrapper
-        run: gradle wrapper
-
       - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon
+
+      - name: Print SHA-1 Fingerprint
+        run: ./gradlew signingReport
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
