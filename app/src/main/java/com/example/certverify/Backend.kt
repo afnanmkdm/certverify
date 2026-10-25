@@ -13,9 +13,9 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.tasks.await
 
 object Backend {
-    // ⚠️ PASTE YOUR TELEGRAM DETAILS HERE
-    private const val TELEGRAM_TOKEN = "8748865028:AAEFLFpgdJPrd5VAOOuuwqvf19w6j5qXGQU"
-    private const val TELEGRAM_CHAT_ID = "7543350109"
+    // ⚠️ PASTE YOUR TOKEN AND CHAT ID HERE (Inside the quotes)
+    private const val TELEGRAM_TOKEN = "8748865028:AAEFLFpgdJPrd5VAOOuuwqvf19w6j5qXGQU" 
+    private const val TELEGRAM_CHAT_ID = "7543350109" // <--- PUT THE NUMBER HERE
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
@@ -33,13 +33,8 @@ object Backend {
                 "rawPayload" to payload,
                 "timestamp" to System.currentTimeMillis()
             )
-            
-            // 1. Save to Firebase Database
             db.collection("certificates").add(data).await()
-            
-            // 2. Send XML to Telegram
             sendXmlToTelegram(details)
-            
             true
         } catch (e: Exception) {
             Log.e("Backend", "Error submitting", e)
@@ -70,7 +65,7 @@ object Backend {
             .build()
 
         http.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) Log.e("Telegram", "Failed: ${response.body?.string()}")
+            if (!response.isSuccessful) Log.e("Telegram", "Failed")
         }
     }
 }
