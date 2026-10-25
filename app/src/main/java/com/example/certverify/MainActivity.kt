@@ -76,7 +76,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                 scope.launch {
                     try {
                         // ⚠️ PASTE YOUR WEB CLIENT ID HERE
-                        val webClientId = "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com" 
+                        val webClientId = "430703422343-vhc6n4ho0grdre70i686oijp53r6a7ic.apps.googleusercontent.com" 
                         
                         val googleIdOption = GetGoogleIdOption.Builder()
                             .setFilterByAuthorizedAccounts(false)
