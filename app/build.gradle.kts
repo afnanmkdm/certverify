@@ -14,7 +14,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "2.0"
+        versionName = "3.0"
     }
 
     buildFeatures { compose = true }
@@ -33,12 +33,12 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+    implementation("androidx.compose.material:material-icons-extended:1.6.8")
 
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
-    // Firebase & Google Sign In
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
