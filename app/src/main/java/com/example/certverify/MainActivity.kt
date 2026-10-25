@@ -83,6 +83,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
     val scope = rememberCoroutineScope()
     val credentialManager = CredentialManager.create(context)
     var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) } // NEW: Error state
     var isPressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(if (isPressed) 0.95f else 1f, label = "btnScale")
 
@@ -112,9 +113,9 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
             Button(
                 onClick = {
                     isLoading = true
+                    errorMessage = null // Reset error
                     scope.launch {
                         try {
-                            // ✅ YOUR WEB CLIENT ID HAS BEEN INSERTED HERE
                             val webClientId = "430703422343-vhc6n4ho0grdre70i686oijp53r6a7ic.apps.googleusercontent.com" 
                             
                             val googleIdOption = GetGoogleIdOption.Builder()
@@ -136,6 +137,8 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                                 onLoginSuccess()
                             }
                         } catch (e: Exception) {
+                            // THIS WILL SHOW THE ERROR ON SCREEN
+                            errorMessage = e.localizedMessage ?: "Error: ${e.message}"
                             e.printStackTrace()
                         } finally {
                             isLoading = false
@@ -156,6 +159,18 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                 } else {
                     Text("Sign in with Google", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 }
+            }
+            
+            // NEW: Display Error Message if login fails
+            Spacer(modifier = Modifier.height(16.dp))
+            errorMessage?.let {
+                Text(
+                    text = "⚠️ $it",
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
             }
         }
     }
