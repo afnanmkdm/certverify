@@ -20,9 +20,6 @@ jobs:
       - name: Build debug APK
         run: gradle assembleDebug --no-daemon
 
-      - name: Print SHA-1 Fingerprint
-        run: gradle signingReport
-
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
