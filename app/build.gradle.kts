@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -16,7 +17,6 @@ android {
     }
 
     buildFeatures { compose = true }
-    composeOptions { kotlinCompilerExtensionVersion = "1.5.14" }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -33,10 +33,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
 
-    // QR decoding from Bitmap (on-device, no camera permission)
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
-
-    // HTTP for verification URL fetch
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
