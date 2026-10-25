@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "430703422343",
+    "project_id": "certverify-e551b",
+    "storage_bucket": "certverify-e551b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430703422343:android:067a8447d23db55b828122",
+        "android_client_info": {
+          "package_name": "com.example.certverify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQlGmo8B7L-cHV-pGRAn3wpVRRiibpUAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
