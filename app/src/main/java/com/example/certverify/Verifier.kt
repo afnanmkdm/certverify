@@ -3,8 +3,6 @@ package com.example.certverify
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.json.JSONObject
 
 data class CertDetails(
@@ -22,20 +20,14 @@ data class VerifyResult(
 )
 
 object Verifier {
-    private val http = OkHttpClient()
-
     suspend fun verify(payload: String): VerifyResult = withContext(Dispatchers.IO) {
-        // NEW: Handle JSON Payload (Wingspan / W3C Verifiable Credentials)
         if (payload.trim().startsWith("{")) {
             try {
                 val json = JSONObject(payload)
                 val subject = json.optJSONObject("credentialSubject")
-                
                 val candidate = subject?.optString("issuedTo")
                 val course = subject?.optString("course")
                 val issuedOn = subject?.optString("completedOn") ?: json.optString("issuanceDate")
-                
-                // Check if the certificate is cryptographically signed
                 val proof = json.optJSONObject("proof")
                 val status = if (proof != null) "Cryptographically Signed" else "Unsigned"
 
@@ -45,19 +37,6 @@ object Verifier {
                 Log.e("Verify", "JSON parse error", e)
             }
         }
-
-        // Handle URL Payload (If they ever use a URL instead)
-        if (payload.startsWith("http://", true) || payload.startsWith("https://", true)) {
-            try {
-                val req = Request.Builder().url(payload).build()
-                val xml = http.newCall(req).execute().use { it.body?.string().orEmpty() }
-                return@withContext VerifyResult(payload, "url", null, xml)
-            } catch (e: Exception) {
-                Log.e("Verify", "Network error", e)
-            }
-        }
-
-        // Fallback
         VerifyResult(payload, "unknown", null, payload)
     }
 }
